@@ -9,7 +9,7 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.form}>
         <TextInput placeholder="Usuario" style={styles.input} placeholderTextColor="#999" />
         <TextInput placeholder="Contraseña" style={styles.input} placeholderTextColor="#999" secureTextEntry />
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main', { screen: 'Home' })}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>

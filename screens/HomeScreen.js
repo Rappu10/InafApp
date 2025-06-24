@@ -27,7 +27,7 @@ export default function HomeScreen() {
         </Text>
         <TouchableOpacity
           style={styles.greenButton}
-          onPress={() => navigation.navigate('Acerca de')}
+          onPress={() => navigation.navigate('Main', { screen: 'About' })}
         >
           <Text style={styles.greenButtonText}>Saber +</Text>
         </TouchableOpacity>
@@ -72,13 +72,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   profileTitle: { fontWeight: 'bold', color: '#333', fontSize: 14 },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginVertical: 10,
-    backgroundColor: '#ccc',
-  },
   profileName: { fontWeight: 'bold', fontSize: 16, color: '#222' },
   role: {
     backgroundColor: '#222',
