@@ -11,6 +11,7 @@ export default function AboutScreen() {
         Somos un equipo apasionado por la tecnología y la innovación que busca transformar el mundo digital.
       </Text>
     </View>
+    
   );
 }
 

@@ -6,40 +6,72 @@ export default function HomeScreen() {
   const navigation = useNavigation();
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 60 }}>
-      <TouchableOpacity
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        style={styles.menuButton}
+    <View style={[styles.container, { backgroundColor: 'rgba(0, 0, 0, 1)', flex: 1 }]}>
+      <Image
+        source={require('../assets/header-trees.png')}
+        style={[
+          styles.headerImage,
+          {
+            height: 420,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            zIndex: 0,
+          },
+        ]}
+        blurRadius={0}
+      />
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 60, paddingTop: 0 }}
       >
-        <Text style={{ fontSize: 24 }}>☰</Text>
-      </TouchableOpacity>
-
-      <Image source={require('../assets/header-trees.png')} style={styles.headerImage} />
-
-      <View style={styles.content}>
-        <Text style={styles.subtitle}>BIENVENIDO</Text>
-        <Text style={styles.title}>
-          Sistema Monitoreo y Conservación <Text style={styles.green}>Forestal</Text>
-        </Text>
-        <Text style={styles.description}>
-          La conservación forestal enfrenta desafíos como la detección tardía de incendios, la falta
-          de monitoreo...
-        </Text>
         <TouchableOpacity
-          style={styles.greenButton}
-          onPress={() => navigation.navigate('Main', { screen: 'About' })}
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          style={styles.menuButton}
         >
-          <Text style={styles.greenButtonText}>Saber +</Text>
+          <Text style={{ fontSize: 24, color: '#fff' }}>☰</Text>
         </TouchableOpacity>
 
-        <View style={styles.profileCard}>
-          <Text style={styles.profileTitle}>INTEGRANTES</Text>
+        <View style={[styles.content, { zIndex: 1 }]}>
+          <Text style={[styles.subtitle, { color: '#fff' }]}>BIENVENIDO</Text>
+          <Text style={[styles.title, { color: '#fff' }]}>
+            Plataforma Inteligente de Monitoreo Agrícola para <Text style={styles.green}>Nogalera</Text>
+          </Text>
+          <Text style={[styles.description, { color: '#ccc' }]}>
+            La conservación forestal enfrenta desafíos como la detección tardía de incendios, la falta de monitoreo en tiempo real de condiciones ambientales (temperatura, humedad, calidad de aire) y la dificultad para identificar especies o actividades humanas no autorizadas en zonas protegidas. Estos problemas limitan la capacidad de respuesta ante emergencias y la protección efectiva de los ecosistemas.
+          </Text>
+          <TouchableOpacity
+            style={styles.greenButton}
+            onPress={() => navigation.navigate('Main', { screen: 'About' })}
+          >
+            <Text style={styles.greenButtonText}>Saber +</Text>
+          </TouchableOpacity>
 
-          <Text style={styles.profileName}>Francisco Cervantes</Text>
-          <Text style={styles.role}>FullStack</Text>
+          <View style={styles.profileCard}>
+            <View style={{ flex: 1 }}>
+              <Text style={[
+                styles.profileTitle,
+                { fontFamily: 'IstokWeb-Regular', marginBottom: 8, color: '#fff' }
+              ]}>INTEGRANTES</Text>
+              <Text style={[
+                styles.profileName,
+                { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
+              ]}>Francisco</Text>
+              <Text style={[
+                styles.profileName,
+                { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
+              ]}>Cervantes</Text>
+              <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
+            </View>
+            <Image
+              source={require('../assets/fco.png')} 
+              style={{ width: 160, height: 160, borderRadius: 40, marginVertical: 16, marginLeft: 0 }}
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -52,10 +84,10 @@ const styles = StyleSheet.create({
   },
   headerImage: { width: '100%', height: 100, resizeMode: 'cover' },
   content: { padding: 24 },
-  subtitle: { color: '#444', fontSize: 12 },
-  title: { fontSize: 22, fontWeight: 'bold', marginVertical: 10 },
+  subtitle: { color: '#101010', fontSize: 12, textAlign: 'left', alignSelf: 'flex-start' },
+  title: { fontSize: 22, fontWeight: 'bold', marginVertical: 10, textAlign: 'left', alignSelf: 'flex-start' },
   green: { color: '#4A9A2C' },
-  description: { fontSize: 14, color: '#555', marginBottom: 20 },
+  description: { fontSize: 14, color: '#555', marginBottom: 20, textAlign: 'left', alignSelf: 'flex-start' },
   greenButton: {
     backgroundColor: '#4A9A2C',
     borderRadius: 20,
@@ -65,13 +97,26 @@ const styles = StyleSheet.create({
   },
   greenButtonText: { color: 'white', fontWeight: 'bold' },
   profileCard: {
-    backgroundColor: '#CFE0C3',
+    backgroundColor: '#101010',
     borderRadius: 16,
+    flexDirection: 'row', // Imagen a la derecha, texto a la izquierda
     alignItems: 'center',
     marginTop: 30,
     padding: 16,
+    borderWidth: 2,
+    borderColor: '#88684C',
+    justifyContent: 'space-between',
   },
-  profileTitle: { fontWeight: 'bold', color: '#333', fontSize: 14 },
+  profileInfo: {
+    flex: 1,
+    marginRight: 16,
+    justifyContent: 'center',
+  },
+  profileTitle: { 
+    fontWeight: 'bold', 
+    color: '#333', 
+    fontSize: 14,
+  },
   profileName: { fontWeight: 'bold', fontSize: 16, color: '#222' },
   role: {
     backgroundColor: '#222',
@@ -80,5 +125,14 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
     marginTop: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(32, 32, 32, 0.87)',
+    alignSelf: 'flex-start',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    marginLeft: 8,
   },
 });
