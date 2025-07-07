@@ -63,11 +63,35 @@ export default function HomeScreen() {
                 { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
               ]}>Cervantes</Text>
               <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
+              {/* Carrusel de imágenes dentro del cuadro de INTEGRANTES */}
+              <ScrollView
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                style={{ marginVertical: 24 }}
+              >
+                <Image
+                  source={require('../assets/fco.png')}
+                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                />
+                <Image
+                  source={require('../assets/fco.png')}
+                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                />
+                <Image
+                  source={require('../assets/fco.png')}
+                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                />
+                <Image
+                  source={require('../assets/fco.png')}
+                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                />
+                <Image
+                  source={require('../assets/fco.png')}
+                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                />
+              </ScrollView>
             </View>
-            <Image
-              source={require('../assets/fco.png')} 
-              style={{ width: 160, height: 160, borderRadius: 40, marginVertical: 16, marginLeft: 0 }}
-            />
           </View>
         </View>
       </ScrollView>

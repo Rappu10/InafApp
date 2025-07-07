@@ -1,37 +1,26 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function MapaNativo() {
+export default function MapScreen() {
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 23.990118,
-          longitude: -104.620156,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      >
-        <Marker
-          coordinate={{
-            latitude: 23.990118,
-            longitude: -104.620156,
-          }}
-          title="UTD"
-          description="Universidad Tecnológica de Durango"
-        />
-      </MapView>
+      <Text style={styles.title}>Sistema de Monitoreo y Conservación Ambiental</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,           // que el View ocupe toda la pantalla
+    flex: 1,
+    backgroundColor: '#000', // Fondo negro
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  map: {
-    flex: 1,           // que el mapa ocupe todo el espacio del View
+  title: {
+    color: '#FFF', // Texto blanco
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });

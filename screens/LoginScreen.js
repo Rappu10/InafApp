@@ -25,17 +25,15 @@ export default function LoginScreen({ navigation }) {
       if (!response.ok) {
         Alert.alert('Error', data.message || 'Error al iniciar sesión');
       } else {
-        // Guardar userId y role en AsyncStorage
         await AsyncStorage.setItem('userId', data.userId);
         await AsyncStorage.setItem('role', data.role);
 
         Alert.alert('Éxito', 'Login exitoso');
 
-        // Navegar al Drawer principal (nombre correcto es 'Main')
         navigation.reset({
           index: 0,
-          routes: [{ name: 'MainDrawer' }],
-      });
+          routes: [{ name: 'Main' }],
+        });
       }
     } catch (error) {
       console.error(error);
@@ -51,6 +49,7 @@ export default function LoginScreen({ navigation }) {
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       />
+
       <Image
         source={require('../assets/header-trees.png')}
         style={[
@@ -88,9 +87,14 @@ export default function LoginScreen({ navigation }) {
           autoCapitalize="none"
           style={[
             styles.input,
-            { fontFamily: 'Inter', backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' },
+            {
+              fontFamily: 'Inter',
+              backgroundColor: 'rgba(204, 204, 204, 1)',
+              color: '#000',
+            },
           ]}
         />
+
         <Text style={styles.label}>Contraseña</Text>
         <TextInput
           placeholder="Contraseña"
@@ -100,12 +104,26 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setPassword}
           style={[
             styles.input,
-            { fontFamily: 'Inter', backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' },
+            {
+              fontFamily: 'Inter',
+              backgroundColor: 'rgba(204, 204, 204, 1)',
+              color: '#000',
+            },
           ]}
         />
+
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <TouchableOpacity style={[styles.button, { width: 140, height: 40 }]} onPress={handleLogin}>
-            <Text style={[styles.buttonText, { fontFamily: 'Inter', fontSize: 15, color: '#fff' }]}>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  fontFamily: 'Inter',
+                  fontSize: 15,
+                  color: '#fff',
+                },
+              ]}
+            >
               Iniciar Sesión
             </Text>
           </TouchableOpacity>
@@ -119,7 +137,6 @@ export default function LoginScreen({ navigation }) {
           Plataforma Inteligente de Monitoreo Agrícola para Nogalera
         </Text>
 
-        {/* Contenedor de la nuez con overlay */}
         <View style={styles.nuezWrapper}>
           <Image source={require('../assets/nuez.png')} style={styles.nuezFrontal} />
           <Image source={require('../assets/nuez-overlay.png')} style={styles.nuezOverlay} />
@@ -139,6 +156,12 @@ const styles = StyleSheet.create({
   gradientBackground: {
     ...StyleSheet.absoluteFillObject,
     zIndex: -2,
+  },
+  headerImage: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    resizeMode: 'cover',
   },
   logoImage: {
     width: 200,
