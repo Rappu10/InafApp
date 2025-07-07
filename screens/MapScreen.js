@@ -1,6 +1,5 @@
-// MapaNativo.js
 import React from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 export default function MapaNativo() {
@@ -30,10 +29,9 @@ export default function MapaNativo() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1,           // que el View ocupe toda la pantalla
   },
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    flex: 1,           // que el mapa ocupe todo el espacio del View
   },
 });

@@ -5,7 +5,7 @@ const sensoresFalsos = [
   { tipo: 'Temperatura', valor: '32°C', estado: 'Alto' },
   { tipo: 'Humedad', valor: '40%', estado: 'Moderado' },
   { tipo: 'Monóxido de Carbono (CO)', valor: '15 ppm', estado: 'Bajo' },
-  { tipo: 'Fuego', valor: 'Detectado', estado: 'Crítico' },
+  { tipo: 'Camara', valor: 'Movimiento Detectado', estado: 'Activo' },
 ];
 
 const getEstadoColor = (estado) => {

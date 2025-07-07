@@ -31,11 +31,8 @@ export default function LoginScreen({ navigation }) {
 
         Alert.alert('Éxito', 'Login exitoso');
 
-        // Navegar al Drawer principal (nombre correcto es 'Main')
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'MainDrawer' }],
-      });
+        // Navegar a la pantalla principal (puede ser 'Main' o como la tengas)
+        navigation.replace('Main');
       }
     } catch (error) {
       console.error(error);
@@ -128,6 +125,8 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
+
+// (Aquí el mismo StyleSheet que tienes)
 
 const styles = StyleSheet.create({
   container: {
