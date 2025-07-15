@@ -1,9 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userId');
+    await AsyncStorage.removeItem('role');
+    // AppNavigator detectará el cambio y redirigirá a Login
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: 'rgba(0, 0, 0, 1)', flex: 1 }]}>
@@ -24,7 +31,7 @@ export default function HomeScreen() {
       />
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 60, paddingTop: 0 }}
+        contentContainerStyle={{ paddingBottom: 100, paddingTop: 0 }}
       >
         <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -63,36 +70,26 @@ export default function HomeScreen() {
                 { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
               ]}>Cervantes</Text>
               <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
-              {/* Carrusel de imágenes dentro del cuadro de INTEGRANTES */}
               <ScrollView
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 style={{ marginVertical: 24 }}
               >
-                <Image
-                  source={require('../assets/fco.png')}
-                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                />
-                <Image
-                  source={require('../assets/fco.png')}
-                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                />
-                <Image
-                  source={require('../assets/fco.png')}
-                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                />
-                <Image
-                  source={require('../assets/fco.png')}
-                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                />
-                <Image
-                  source={require('../assets/fco.png')}
-                  style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                />
+                {[...Array(5)].map((_, i) => (
+                  <Image
+                    key={i}
+                    source={require('../assets/fco.png')}
+                    style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
+                  />
+                ))}
               </ScrollView>
             </View>
           </View>
+
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutText}>Cerrar sesión</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
   profileCard: {
     backgroundColor: '#101010',
     borderRadius: 16,
-    flexDirection: 'row', // Imagen a la derecha, texto a la izquierda
+    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 30,
     padding: 16,
@@ -136,9 +133,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
     justifyContent: 'center',
   },
-  profileTitle: { 
-    fontWeight: 'bold', 
-    color: '#333', 
+  profileTitle: {
+    fontWeight: 'bold',
+    color: '#333',
     fontSize: 14,
   },
   profileName: { fontWeight: 'bold', fontSize: 16, color: '#222' },
@@ -158,5 +155,18 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 20,
     marginLeft: 8,
+  },
+  logoutButton: {
+    marginTop: 40,
+    alignSelf: 'center',
+    backgroundColor: '#C04A4A',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

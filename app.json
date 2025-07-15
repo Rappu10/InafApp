@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "InafApp",
-    "slug": "InafApp",
+    "name": "Totec",
+    "slug": "Totec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,8 +22,10 @@
       },
       "edgeToEdgeEnabled": true
     },
+    "jsEngine": "hermes",
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "sdkVersion": "53.0.0"
   }
 }

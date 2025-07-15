@@ -27,18 +27,19 @@ export default function LoginScreen({ navigation }) {
       } else {
         await AsyncStorage.setItem('userId', data.userId);
         await AsyncStorage.setItem('role', data.role);
-
         Alert.alert('Éxito', 'Login exitoso');
-
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Main' }],
-        });
+        // NO navegar aquí, AppNavigator se encarga al detectar role
       }
     } catch (error) {
       console.error(error);
       Alert.alert('Error de red', 'No se pudo conectar al servidor');
     }
+  };
+
+  const enterWithoutAccount = async () => {
+    await AsyncStorage.setItem('role', 'guest');
+    Alert.alert('Acceso sin cuenta', 'Entraste como invitado');
+    // AppNavigator detectará el role y redirigirá
   };
 
   return (
@@ -85,14 +86,7 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          style={[
-            styles.input,
-            {
-              fontFamily: 'Inter',
-              backgroundColor: 'rgba(204, 204, 204, 1)',
-              color: '#000',
-            },
-          ]}
+          style={[styles.input, { backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' }]}
         />
 
         <Text style={styles.label}>Contraseña</Text>
@@ -102,32 +96,26 @@ export default function LoginScreen({ navigation }) {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-          style={[
-            styles.input,
-            {
-              fontFamily: 'Inter',
-              backgroundColor: 'rgba(204, 204, 204, 1)',
-              color: '#000',
-            },
-          ]}
+          style={[styles.input, { backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' }]}
         />
 
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 20 }}>
           <TouchableOpacity style={[styles.button, { width: 140, height: 40 }]} onPress={handleLogin}>
-            <Text
-              style={[
-                styles.buttonText,
-                {
-                  fontFamily: 'Inter',
-                  fontSize: 15,
-                  color: '#fff',
-                },
-              ]}
-            >
+            <Text style={[styles.buttonText, { fontFamily: 'Inter', fontSize: 15, color: '#fff' }]}>
               Iniciar Sesión
             </Text>
           </TouchableOpacity>
         </View>
+
+        {/* Botón para entrar sin cuenta */}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#777', width: 180, height: 40, alignSelf: 'center' }]}
+          onPress={enterWithoutAccount}
+        >
+          <Text style={[styles.buttonText, { fontFamily: 'Inter', fontSize: 15, color: '#fff' }]}>
+            Entrar sin cuenta
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Información inferior */}
