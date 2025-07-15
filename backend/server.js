@@ -4,16 +4,22 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
+// Importación de rutas externas
 const reportRoutes = require('./api/reports');
+const sensorRoutes = require('./routes/sensores'); 
 
+// ✅ Instancia de Express primero
 const app = express();
+
+// ✅ Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+// ✅ Rutas
 app.use('/api/reports', reportRoutes);
+app.use('/api/sensores', sensorRoutes);
 
-// Conexión a MongoDB
+// ✅ Conexión a MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -21,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
   .catch((err) => console.error('❌ Error al conectar a MongoDB:', err));
 
-// Modelo de Usuario (simple)
+// ✅ Modelo de Usuario
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -29,7 +35,7 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Registro
+// ✅ Registro de usuario
 app.post('/register', async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -46,7 +52,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Login
+// ✅ Login de usuario
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -62,5 +68,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// ✅ Arrancar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Servidor corriendo en puerto ${PORT}`));

@@ -26,21 +26,19 @@ export default function HomeScreen({ onLogout }) {
             Plataforma Inteligente de Monitoreo Agrícola para <Text style={styles.green}>Nogalera</Text>
           </Text>
           <Text style={[styles.description, { color: '#ccc' }]}>
-            La conservación forestal enfrenta desafíos como la detección tardía de incendios...
+              La conservación forestal enfrenta numerosos desafíos críticos, tales como la detección tardía de incendios,
+              la pérdida de biodiversidad, la deforestación y la degradación ambiental. Estos problemas impactan 
+              negativamente en el equilibrio ecológico y la salud del planeta. Por ello, es fundamental implementar
+              soluciones tecnológicas innovadoras que permitan un monitoreo constante, detección temprana y respuesta 
+              rápida para mitigar los daños y preservar los recursos naturales. Nuestra plataforma busca integrar estas 
+              tecnologías para apoyar la gestión eficiente y sostenible de los ecosistemas forestales.
           </Text>
-
-          <TouchableOpacity
-            style={styles.greenButton}
-            onPress={() => navigation.navigate('Main', { screen: 'About' })}
-          >
-            <Text style={styles.greenButtonText}>Saber +</Text>
-          </TouchableOpacity>
 
           <View style={styles.profileCard}>
             <View style={{ flex: 1 }}>
               <Text style={[styles.profileTitle, { color: '#fff' }]}>INTEGRANTES</Text>
               <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Francisco</Text>
-              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Cervantes</Text>
+              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Cervantes</Text>          
               <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
 
               <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ marginVertical: 24 }}>

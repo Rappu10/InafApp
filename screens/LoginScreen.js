@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Modal,
+  Pressable,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [onModalAccept, setOnModalAccept] = useState(null);
+
+  const showModal = (title, message, onAccept = null) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalVisible(true);
+    setOnModalAccept(() => onAccept); // Guarda función para ejecutar al aceptar
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Campos vacíos', 'Por favor completa todos los campos');
+      showModal('Campos vacíos', 'Por favor completa todos los campos');
       return;
     }
 
@@ -22,25 +43,23 @@ export default function LoginScreen({ onLogin }) {
       const data = await response.json();
 
       if (!response.ok) {
-        Alert.alert('Error', data.message || 'Error al iniciar sesión');
+        showModal('Error', data.message || 'Error al iniciar sesión');
       } else {
-        Alert.alert('Éxito', 'Login exitoso');
-        onLogin(data.role); // 🔁 Usa función del AppNavigator
+        showModal('Éxito', 'Login exitoso', () => onLogin(data.role));
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Error de red', 'No se pudo conectar al servidor');
+      showModal('Error de red', 'No se pudo conectar al servidor');
     }
   };
 
   const enterWithoutAccount = () => {
-    Alert.alert('Acceso sin cuenta', 'Entraste como invitado');
-    onLogin('guest');
+    showModal('Acceso sin cuenta', 'Entraste como invitado', () => onLogin('guest'));
   };
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#F5E9DA', '#C4A484']} style={styles.gradientBackground} />
+      <LinearGradient colors={['#000', '#222']} style={styles.gradientBackground} />
       <Image source={require('../assets/header-trees.png')} style={[styles.headerImage, { top: -60 }]} />
       <Image source={require('../assets/totec-logo.png')} style={styles.logoImage} />
 
@@ -48,22 +67,22 @@ export default function LoginScreen({ onLogin }) {
         <Text style={styles.label}>Usuario</Text>
         <TextInput
           placeholder="Correo"
-          placeholderTextColor="#494949"
+          placeholderTextColor="#888"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          style={[styles.input, { backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' }]}
+          style={styles.input}
         />
 
         <Text style={styles.label}>Contraseña</Text>
         <TextInput
           placeholder="Contraseña"
-          placeholderTextColor="#494949"
+          placeholderTextColor="#888"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-          style={[styles.input, { backgroundColor: 'rgba(204, 204, 204, 1)', color: '#000' }]}
+          style={styles.input}
         />
 
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 20 }}>
@@ -86,6 +105,31 @@ export default function LoginScreen({ onLogin }) {
           Plataforma Inteligente de Monitoreo Agrícola para Nogalera
         </Text>
       </View>
+
+      {/* Modal personalizado */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+
+            <Pressable
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                if (onModalAccept) onModalAccept();
+              }}
+            >
+              <Text style={styles.modalButtonText}>Aceptar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -119,14 +163,14 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   label: {
-    color: '#CCCCCC',
+    color: '#fff',
     marginBottom: 4,
     marginLeft: 4,
     fontFamily: 'Inter',
   },
   input: {
-    backgroundColor: '#2C2C2C',
-    color: '#FFFFFF',
+    backgroundColor: '#111',
+    color: '#fff',
     paddingHorizontal: 16,
     height: 52,
     borderRadius: 12,
@@ -140,48 +184,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#000',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
-  bottomContent: {
-    marginTop: 30,
+
+  // Modal styles
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
   },
-  bienvenido: {
-    color: '#888',
-    letterSpacing: 1,
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  descripcion: {
-    fontSize: 14,
-    textAlign: 'left',
-    marginHorizontal: 4,
-  },
-  nuezWrapper: {
+  modalView: {
+    backgroundColor: '#222',
+    borderRadius: 12,
+    padding: 20,
     width: '100%',
-    aspectRatio: 1.2,
-    marginTop: 16,
-    position: 'relative',
-    alignSelf: 'center',
+    maxWidth: 360,
+    alignItems: 'center',
   },
-  nuezFrontal: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: 1,
+  modalTitle: {
+    color: '#4A9A2C',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 12,
   },
-  nuezOverlay: {
-    width: '200%',
-    height: '200%',
-    resizeMode: 'contain',
-    position: 'absolute',
-    top: -160,
-    left: -200,
-    zIndex: 2,
-    opacity: 15,
+  modalMessage: {
+    color: '#eee',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  modalButton: {
+    backgroundColor: '#4A9A2C',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
