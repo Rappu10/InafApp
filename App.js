@@ -1,11 +1,12 @@
 import React from 'react';
-import { AuthProvider } from './navigation/AuthContext';
+import { StatusBar } from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App() {
   return (
-    <AuthProvider>
+    <>
+      <StatusBar barStyle="light-content" />
       <AppNavigator />
-    </AuthProvider>
+    </>
   );
 }

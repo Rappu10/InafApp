@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,10 +24,8 @@ export default function LoginScreen({ navigation }) {
       if (!response.ok) {
         Alert.alert('Error', data.message || 'Error al iniciar sesión');
       } else {
-        await AsyncStorage.setItem('userId', data.userId);
-        await AsyncStorage.setItem('role', data.role);
         Alert.alert('Éxito', 'Login exitoso');
-        // NO navegar aquí, AppNavigator se encarga al detectar role
+        onLogin(data.role); // 🔁 Usa función del AppNavigator
       }
     } catch (error) {
       console.error(error);
@@ -36,47 +33,17 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  const enterWithoutAccount = async () => {
-    await AsyncStorage.setItem('role', 'guest');
+  const enterWithoutAccount = () => {
     Alert.alert('Acceso sin cuenta', 'Entraste como invitado');
-    // AppNavigator detectará el role y redirigirá
+    onLogin('guest');
   };
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#F5E9DA', '#C4A484']}
-        style={styles.gradientBackground}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-      />
-
-      <Image
-        source={require('../assets/header-trees.png')}
-        style={[
-          styles.headerImage,
-          {
-            height: 520,
-            position: 'absolute',
-            width: '100%',
-            zIndex: 0,
-            left: 20,
-            top: -60,
-          },
-        ]}
-        blurRadius={0}
-      />
-
+      <LinearGradient colors={['#F5E9DA', '#C4A484']} style={styles.gradientBackground} />
+      <Image source={require('../assets/header-trees.png')} style={[styles.headerImage, { top: -60 }]} />
       <Image source={require('../assets/totec-logo.png')} style={styles.logoImage} />
 
-      <LinearGradient
-        colors={['#110E0A', '#5F462C']}
-        style={styles.gradientBackground}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-      />
-
-      {/* Formulario */}
       <View style={styles.form}>
         <Text style={styles.label}>Usuario</Text>
         <TextInput
@@ -101,34 +68,23 @@ export default function LoginScreen({ navigation }) {
 
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 20 }}>
           <TouchableOpacity style={[styles.button, { width: 140, height: 40 }]} onPress={handleLogin}>
-            <Text style={[styles.buttonText, { fontFamily: 'Inter', fontSize: 15, color: '#fff' }]}>
-              Iniciar Sesión
-            </Text>
+            <Text style={[styles.buttonText, { fontSize: 15, color: '#fff' }]}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Botón para entrar sin cuenta */}
         <TouchableOpacity
           style={[styles.button, { backgroundColor: '#777', width: 180, height: 40, alignSelf: 'center' }]}
           onPress={enterWithoutAccount}
         >
-          <Text style={[styles.buttonText, { fontFamily: 'Inter', fontSize: 15, color: '#fff' }]}>
-            Entrar sin cuenta
-          </Text>
+          <Text style={[styles.buttonText, { fontSize: 15, color: '#fff' }]}>Entrar sin cuenta</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Información inferior */}
-      <View style={[styles.bottomContent, { alignItems: 'flex-start', width: '100%' }]}>
-        <Text style={[styles.bienvenido, { fontFamily: 'Inter' }]}>BIENVENIDO</Text>
-        <Text style={[styles.descripcion, { fontFamily: 'Inter', color: 'rgb(101, 101, 101)' }]}>
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: '#888', letterSpacing: 1, fontSize: 12 }}>BIENVENIDO</Text>
+        <Text style={{ fontSize: 14, color: 'rgb(101, 101, 101)' }}>
           Plataforma Inteligente de Monitoreo Agrícola para Nogalera
         </Text>
-
-        <View style={styles.nuezWrapper}>
-          <Image source={require('../assets/nuez.png')} style={styles.nuezFrontal} />
-          <Image source={require('../assets/nuez-overlay.png')} style={styles.nuezOverlay} />
-        </View>
       </View>
     </View>
   );

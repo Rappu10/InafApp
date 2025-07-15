@@ -1,38 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LoginScreen from '../screens/LoginScreen';
+
+// Icon mapping for each screen
+const screenIcons = {
+  Home: 'home-outline',
+  Sensores: 'speedometer-outline',
+  Map: 'map-outline',
+  About: 'information-circle-outline',
+  Reports: 'document-text-outline',
+  Mapa: 'map-outline',
+  Reportes: 'document-text-outline',
+};
+
 import HomeScreen from '../screens/HomeScreen';
 import SensoresScreen from '../screens/SensoresScreen';
 import AboutScreen from '../screens/AboutScreen';
 import MapScreen from '../screens/MapScreen';
+import ReportsScreen from '../screens/ReportsScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function AuthStack() {
+function MainStack({ onLogout }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-    </Stack.Navigator>
-  );
-}
-
-function MainStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Home">
+        {() => <HomeScreen onLogout={onLogout} />}
+      </Stack.Screen>
       <Stack.Screen name="Sensores" component={SensoresScreen} />
       <Stack.Screen name="Map" component={MapScreen} />
       <Stack.Screen name="About" component={AboutScreen} />
+      <Stack.Screen name="Reports" component={ReportsScreen} />
     </Stack.Navigator>
   );
 }
 
-function DrawerNavigator() {
+function DrawerNavigator({ onLogout }) {
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -43,46 +51,38 @@ function DrawerNavigator() {
         drawerItemStyle: { borderBottomWidth: 0.3, borderBottomColor: '#333' },
       }}
     >
-      <Drawer.Screen
-        name="Main"
-        component={MainStack}
-        options={{ title: 'Inicio' }}
-      />
+      <Drawer.Screen name="Main">
+        {() => <MainStack onLogout={onLogout} />}
+      </Drawer.Screen>
       <Drawer.Screen name="Sensores" component={SensoresScreen} />
-      <Drawer.Screen name="Map" component={MapScreen} />
-      <Drawer.Screen name="About" component={AboutScreen} />
+      <Drawer.Screen name="Mapa" component={MapScreen} />
+      <Drawer.Screen name="Reportes" component={ReportsScreen} />
     </Drawer.Navigator>
   );
 }
 
 export default function AppNavigator() {
-  const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState(null); // null = no logueado
 
-  useEffect(() => {
-    async function fetchRole() {
-      try {
-        const storedRole = await AsyncStorage.getItem('role');
-        if (storedRole && storedRole !== 'undefined' && storedRole !== '') {
-          setRole(storedRole);
-        } else {
-          setRole(null);
-        }
-      } catch (e) {
-        console.error('Error leyendo rol:', e);
-        setRole(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchRole();
-  }, []);
+  const handleLogin = (newRole) => {
+    setRole(newRole); // puede ser 'admin', 'user', 'guest', etc.
+  };
 
-  if (loading) return null;
+  const handleLogout = () => {
+    setRole(null); // Esto vuelve a LoginScreen
+  };
 
   return (
     <NavigationContainer>
-      {role ? <DrawerNavigator /> : <AuthStack />}
+      {role ? (
+        <DrawerNavigator onLogout={handleLogout} />
+      ) : (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login">
+            {() => <LoginScreen onLogin={handleLogin} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      )}
     </NavigationContainer>
   );
 }

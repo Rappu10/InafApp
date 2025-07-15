@@ -1,38 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function HomeScreen() {
+export default function HomeScreen({ onLogout }) {
   const navigation = useNavigation();
-
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('userId');
-    await AsyncStorage.removeItem('role');
-    // AppNavigator detectará el cambio y redirigirá a Login
-  };
 
   return (
     <View style={[styles.container, { backgroundColor: 'rgba(0, 0, 0, 1)', flex: 1 }]}>
       <Image
         source={require('../assets/header-trees.png')}
-        style={[
-          styles.headerImage,
-          {
-            height: 420,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            zIndex: 0,
-          },
-        ]}
+        style={[styles.headerImage, { height: 420, position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 0 }]}
         blurRadius={0}
       />
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 100, paddingTop: 0 }}
-      >
+      <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 0 }}>
         <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           style={styles.menuButton}
@@ -46,8 +26,9 @@ export default function HomeScreen() {
             Plataforma Inteligente de Monitoreo Agrícola para <Text style={styles.green}>Nogalera</Text>
           </Text>
           <Text style={[styles.description, { color: '#ccc' }]}>
-            La conservación forestal enfrenta desafíos como la detección tardía de incendios, la falta de monitoreo en tiempo real de condiciones ambientales (temperatura, humedad, calidad de aire) y la dificultad para identificar especies o actividades humanas no autorizadas en zonas protegidas. Estos problemas limitan la capacidad de respuesta ante emergencias y la protección efectiva de los ecosistemas.
+            La conservación forestal enfrenta desafíos como la detección tardía de incendios...
           </Text>
+
           <TouchableOpacity
             style={styles.greenButton}
             onPress={() => navigation.navigate('Main', { screen: 'About' })}
@@ -57,25 +38,12 @@ export default function HomeScreen() {
 
           <View style={styles.profileCard}>
             <View style={{ flex: 1 }}>
-              <Text style={[
-                styles.profileTitle,
-                { fontFamily: 'IstokWeb-Regular', marginBottom: 8, color: '#fff' }
-              ]}>INTEGRANTES</Text>
-              <Text style={[
-                styles.profileName,
-                { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
-              ]}>Francisco</Text>
-              <Text style={[
-                styles.profileName,
-                { fontFamily: 'InstrumentSans-Regular', marginBottom: 8, color: '#C1C1C1BD' }
-              ]}>Cervantes</Text>
+              <Text style={[styles.profileTitle, { color: '#fff' }]}>INTEGRANTES</Text>
+              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Francisco</Text>
+              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Cervantes</Text>
               <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
-              <ScrollView
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                style={{ marginVertical: 24 }}
-              >
+
+              <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ marginVertical: 24 }}>
                 {[...Array(5)].map((_, i) => (
                   <Image
                     key={i}
@@ -87,7 +55,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <TouchableOpacity style={styles.logoutButton} onPress={onLogout}>
             <Text style={styles.logoutText}>Cerrar sesión</Text>
           </TouchableOpacity>
         </View>
@@ -95,7 +63,6 @@ export default function HomeScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: { backgroundColor: '#F2F2F2' },
   menuButton: {
