@@ -6,7 +6,7 @@ const reportSchema = new mongoose.Schema({
   reportType: {
     type: String,
     enum: ['URGENTE', 'Comun'],
-    default: 'Comun',
+    required: true, // Ahora el usuario debe escoger el tipo
   },
   location: {
     type: {
@@ -30,7 +30,7 @@ const reportSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['PENDIENTE', 'EN_PROCESO', 'RESUELTO'],
-    default: 'PENDIENTE',
+    required: true, // Ahora el usuario debe escoger el estado
   },
   createDate: { type: Date, default: () => new Date() },
   solutionDate: { type: Date, default: null },
@@ -38,4 +38,4 @@ const reportSchema = new mongoose.Schema({
 
 reportSchema.index({ location: '2dsphere' });
 
-module.exports = mongoose.models.Report || mongoose.model('Report', reportSchema);
+module.exports = mongoose.models.Report || mongoose.model('Report', reportSchema, 'reports');

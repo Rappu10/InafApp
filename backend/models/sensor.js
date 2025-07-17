@@ -6,4 +6,4 @@ const sensorSchema = new mongoose.Schema({
   estado: String,
 });
 
-module.exports = mongoose.model('Sensor', sensorSchema);
+module.exports = mongoose.model('Sensor', sensorSchema, 'sensor_readings');
