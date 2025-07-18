@@ -1,9 +1,51 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
+
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function HomeScreen({ onLogout }) {
   const navigation = useNavigation();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const teamMembers = [
+    {
+      id: 1,
+      name: "Francisco Cervantes",
+      role: "FullStack Developer",
+      image: require('../assets/fco.png')
+    },
+    {
+      id: 2,
+      name: "Jared Hernández",
+      role: "Frontend Specialist",
+      image: require('../assets/fco.png')
+    },
+    {
+      id: 3,
+      name: "Marshall López",
+      role: "IOT Engineer",
+      image: require('../assets/fco.png')
+    },
+    {
+      id: 4,
+      name: " Eduardo Dario",
+      role: "MongoBD Designer",
+      image: require('../assets/fco.png')
+    },
+    {
+      id: 5,
+      name: "Cesar Luis",
+      role: "DevOps Engineer",
+      image: require('../assets/fco.png')
+    }
+  ];
+
+  const handleScroll = (event) => {
+    const contentOffset = event.nativeEvent.contentOffset.x;
+    const index = Math.round(contentOffset / screenWidth);
+    setCurrentIndex(index);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: 'rgba(0, 0, 0, 1)', flex: 1 }]}>
@@ -26,30 +68,47 @@ export default function HomeScreen({ onLogout }) {
             Plataforma Inteligente de Monitoreo Agrícola para <Text style={styles.green}>Nogalera</Text>
           </Text>
           <Text style={[styles.description, { color: '#ccc' }]}>
-              La conservación forestal enfrenta numerosos desafíos críticos, tales como la detección tardía de incendios,
-              la pérdida de biodiversidad, la deforestación y la degradación ambiental. Estos problemas impactan 
-              negativamente en el equilibrio ecológico y la salud del planeta. Por ello, es fundamental implementar
-              soluciones tecnológicas innovadoras que permitan un monitoreo constante, detección temprana y respuesta 
-              rápida para mitigar los daños y preservar los recursos naturales. Nuestra plataforma busca integrar estas 
-              tecnologías para apoyar la gestión eficiente y sostenible de los ecosistemas forestales.
+            La conservación forestal enfrenta numerosos desafíos críticos, tales como la detección tardía de incendios,
+            la pérdida de biodiversidad, la deforestación y la degradación ambiental.
           </Text>
 
           <View style={styles.profileCard}>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.profileTitle, { color: '#fff' }]}>INTEGRANTES</Text>
-              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Francisco</Text>
-              <Text style={[styles.profileName, { color: '#C1C1C1BD' }]}>Cervantes</Text>          
-              <Text style={[styles.role, { marginTop: 12 }]}>FullStack</Text>
-
-              <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ marginVertical: 24 }}>
-                {[...Array(5)].map((_, i) => (
-                  <Image
-                    key={i}
-                    source={require('../assets/fco.png')}
-                    style={{ width: 120, height: 80, borderRadius: 16, marginRight: 12 }}
-                  />
+            <Text style={[styles.profileTitle, { color: '#fff' }]}>NUESTRO EQUIPO</Text>
+            
+            {/* Carrusel mejorado */}
+            <View style={styles.carouselContainer}>
+              <ScrollView 
+                horizontal 
+                pagingEnabled 
+                showsHorizontalScrollIndicator={false}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+              >
+                {teamMembers.map((member) => (
+                  <View key={member.id} style={styles.carouselItem}>
+                    <Image
+                      source={member.image}
+                      style={styles.carouselImage}
+                      resizeMode="cover"
+                    />
+                    <View style={styles.memberInfo}>
+                      <Text style={styles.memberName}>{member.name}</Text>
+                      <Text style={styles.memberRole}>{member.role}</Text>
+                    </View>
+                  </View>
                 ))}
               </ScrollView>
+              <View style={styles.indicatorContainer}>
+                {teamMembers.map((_, index) => (
+                  <View 
+                    key={index} 
+                    style={[
+                      styles.indicator,
+                      index === currentIndex && styles.activeIndicator
+                    ]} 
+                  />
+                ))}
+              </View>
             </View>
           </View>
 
@@ -61,65 +120,101 @@ export default function HomeScreen({ onLogout }) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: { backgroundColor: '#F2F2F2' },
   menuButton: {
     padding: 10,
     marginLeft: 10,
     marginTop: 10,
+    zIndex: 2,
   },
   headerImage: { width: '100%', height: 100, resizeMode: 'cover' },
   content: { padding: 24 },
-  subtitle: { color: '#101010', fontSize: 12, textAlign: 'left', alignSelf: 'flex-start' },
-  title: { fontSize: 22, fontWeight: 'bold', marginVertical: 10, textAlign: 'left', alignSelf: 'flex-start' },
-  green: { color: '#4A9A2C' },
-  description: { fontSize: 14, color: '#555', marginBottom: 20, textAlign: 'left', alignSelf: 'flex-start' },
-  greenButton: {
-    backgroundColor: '#4A9A2C',
-    borderRadius: 20,
+  subtitle: { 
+    color: '#fff', 
+    fontSize: 12, 
+    textAlign: 'left', 
     alignSelf: 'flex-start',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    letterSpacing: 1,
   },
-  greenButtonText: { color: 'white', fontWeight: 'bold' },
+  title: { 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    marginVertical: 10, 
+    textAlign: 'left', 
+    alignSelf: 'flex-start',
+    lineHeight: 30,
+  },
+  green: { color: '#4A9A2C' },
+  description: { 
+    fontSize: 14, 
+    color: '#ccc', 
+    marginBottom: 20, 
+    textAlign: 'left', 
+    alignSelf: 'flex-start',
+    lineHeight: 20,
+  },
   profileCard: {
     backgroundColor: '#101010',
     borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
     marginTop: 30,
-    padding: 16,
+    padding: 20,
     borderWidth: 2,
     borderColor: '#88684C',
-    justifyContent: 'space-between',
-  },
-  profileInfo: {
-    flex: 1,
-    marginRight: 16,
-    justifyContent: 'center',
   },
   profileTitle: {
     fontWeight: 'bold',
-    color: '#333',
-    fontSize: 14,
-  },
-  profileName: { fontWeight: 'bold', fontSize: 16, color: '#222' },
-  role: {
-    backgroundColor: '#222',
     color: '#fff',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginTop: 6,
-    borderWidth: 1,
-    borderColor: 'rgba(32, 32, 32, 0.87)',
-    alignSelf: 'flex-start',
+    fontSize: 18,
+    marginBottom: 16,
+    textAlign: 'center',
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 20,
-    marginLeft: 8,
+  carouselContainer: {
+    marginVertical: 16,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  carouselItem: {
+    width: screenWidth - 48,
+    height: 250,
+    alignItems: 'center',
+  },
+  carouselImage: {
+    width: '100%',
+    height: 180,
+    borderRadius: 12,
+  },
+  memberInfo: {
+    marginTop: 12,
+    alignItems: 'center',
+  },
+  memberName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  memberRole: {
+    fontSize: 14,
+    color: '#4A9A2C',
+    fontStyle: 'italic',
+  },
+  indicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 12,
+  },
+  indicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#555',
+    marginHorizontal: 4,
+  },
+  activeIndicator: {
+    backgroundColor: '#4A9A2C',
+    width: 16,
   },
   logoutButton: {
     marginTop: 40,
